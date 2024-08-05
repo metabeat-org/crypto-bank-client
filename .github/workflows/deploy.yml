@@ -30,17 +30,17 @@ jobs:
           sudo apt-get install -y python3 python3-pip
           pip3 install --upgrade awscli
 
-          - name: Install Elastic Beanstalk CLI
-            run: pip3 install awsebcli --upgrade
+      - name: Install Elastic Beanstalk CLI
+        run: pip3 install awsebcli --upgrade
 
-          - name: Configure AWS credentials
-            env:
-              AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            run: |
-              aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-              aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-              aws configure set default.region ap-northeast-2
+      - name: Configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set default.region ap-northeast-2
 
       - name: Deploy to Elastic Beanstalk
         env:
