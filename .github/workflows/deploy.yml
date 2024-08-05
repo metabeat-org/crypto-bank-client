@@ -50,6 +50,6 @@ jobs:
           EB_ENV_NAME: 'crypto-bank-client-dev'
         run: |
           zip -r ../deploy.zip . -x "node_modules/*"
-          eb init -p node.js --region $AWS_REGION --interactive=false
+          eb init $EB_APPLICATION_NAME --region $AWS_REGION --platform "Node.js 18 running on 64bit Amazon Linux 2023"
           eb use $EB_ENV_NAME
           eb deploy --staged
