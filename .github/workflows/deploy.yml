@@ -24,32 +24,22 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-
       - name: Install AWS CLI
         run: |
-          python -m venv env
-          source env/bin/activate
-          pip install --upgrade pip
-          pip install awscli
+          sudo apt-get update
+          sudo apt-get install -y awscli
 
       - name: Configure AWS credentials
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          echo "[default]" > ~/.aws/credentials
-          echo "aws_access_key_id=${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
-          echo "aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
-          echo "[default]" > ~/.aws/config
-          echo "region=ap-northeast-2" >> ~/.aws/config
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set default.region ap-northeast-2
 
       - name: Install Elastic Beanstalk CLI
         run: |
-          source env/bin/activate
           pip install awsebcli
 
       - name: Deploy to Elastic Beanstalk
@@ -59,8 +49,7 @@ jobs:
           AWS_REGION: 'ap-northeast-2'
           EB_ENV_NAME: 'crypto-bank-client-dev'
         run: |
-          source env/bin/activate
           zip -r ../deploy.zip . -x "node_modules/*"
-          npx eb init --region $AWS_REGION --platform "Node.js 18 running on 64bit Amazon Linux 2023" --interactive=false
-          npx eb use $EB_ENV_NAME
-          npx eb deploy $EB_ENV_NAME --region $AWS_REGION --staged
+          eb init -p node.js --region $AWS_REGION --interactive=false
+          eb use $EB_ENV_NAME
+          eb deploy --staged
