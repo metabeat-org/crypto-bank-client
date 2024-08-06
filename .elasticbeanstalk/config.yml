@@ -13,3 +13,5 @@ global:
   platform_version: 18
   profile: eb-cli
   workspace_type: Application
+deploy:
+  artifact: deploy.zip

@@ -54,4 +54,4 @@ jobs:
         run: |
           eb init $EB_APPLICATION_NAME --region $AWS_REGION --platform "Node.js 18 running on 64bit Amazon Linux 2023"
           eb use $EB_ENV_NAME
-          eb deploy --staged --artifact deploy.zip 
+          eb deploy --staged
