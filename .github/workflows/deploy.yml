@@ -25,12 +25,7 @@ jobs:
         run: npm run build
 
       - name: Zip build directory
-        run: |
-          mkdir -p deploy
-          cp -r .next/standalone deploy/
-          cp -r public deploy/
-          cp next.config.js deploy/
-          cd deploy && zip -r ../deploy.zip .e
+        run: zip -r deploy.zip .next/standalone
 
       - name: Install AWS CLI
         run: |
