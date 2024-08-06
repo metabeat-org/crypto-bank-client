@@ -25,7 +25,12 @@ jobs:
         run: npm run build
 
       - name: Zip build directory
-        run: zip -r deploy.zip .next/standalone
+        run: |
+          mkdir -p deploy
+          cp -r .next/standalone deploy/
+          cp -r public deploy/
+          cp next.config.js deploy/
+          cd deploy && zip -r ../deploy.zip .e
 
       - name: Install AWS CLI
         run: |
@@ -51,6 +56,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'ap-northeast-2'
           EB_ENV_NAME: 'crypto-bank-client-dev'
+          EB_APPLICATION_NAME: 'crypto-bank-client'
         run: |
           eb init $EB_APPLICATION_NAME --region $AWS_REGION --platform "Node.js 18 running on 64bit Amazon Linux 2023"
           eb use $EB_ENV_NAME
